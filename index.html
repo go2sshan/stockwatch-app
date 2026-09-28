@@ -85,6 +85,33 @@ nav button.on{color:var(--acc)}
 #lock .go{width:100%;margin-top:12px;padding:14px;border:0;border-radius:14px;background:var(--acc);color:#fff;font-weight:600;font-size:17px}
 #lock label{display:flex;gap:8px;align-items:center;justify-content:center;color:var(--mute);font-size:14px;margin-top:14px}
 #err{color:var(--dn);font-size:14px;min-height:20px;margin-top:10px}
+
+.hbtns{display:flex;gap:8px}
+.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:600;background:var(--soft);color:var(--ink)}
+.btn.pri{background:var(--acc);color:#fff}
+.btn.danger{background:color-mix(in srgb,var(--dn) 14%,transparent);color:var(--dn)}
+.btn.sm{padding:8px 12px;font-size:14px}
+.acts{display:flex;gap:8px;margin-top:12px}
+.addbar{display:flex;gap:10px;margin:4px 0 12px}
+.addbar .btn{flex:1;background:var(--card);border:1px solid var(--line)}
+.field{display:block;margin-top:12px}
+.field span{display:block;font-size:13px;color:var(--mute);margin:0 0 5px 2px}
+.field input{width:100%;font:inherit;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--soft);color:var(--ink);-webkit-appearance:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;margin-top:4px}
+.seg button{flex:1;border:0;background:none;padding:9px;border-radius:10px;font-weight:600;color:var(--mute)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px #0002}
+#sheet{position:fixed;inset:0;z-index:30;background:#0007;display:flex;align-items:flex-end;justify-content:center}
+#sheet .panel{width:100%;max-width:640px;background:var(--card);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+#sheet h3{margin:0;font-size:20px}
+.hint{font-size:13px;color:var(--mute);margin-top:8px}
+#toast{position:fixed;left:16px;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;max-width:600px;margin:0 auto;background:var(--ink);color:var(--bg);padding:12px 14px;border-radius:14px;font-size:14px;box-shadow:0 6px 20px #0004}
+.analysis{font-size:14px;line-height:1.5;white-space:normal}
+.analysis b{font-weight:700}
+.search{display:flex;gap:8px}
+.search input{flex:1;font:inherit;font-size:17px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.pending{border-style:dashed}
+nav button{min-width:56px;padding:4px 6px}
 .hidden{display:none!important}
 </style>
 </head>
@@ -106,9 +133,14 @@ nav button.on{color:var(--acc)}
   <header>
     <div class="hrow">
       <div><h1 id="title">Holdings</h1><div class="sub" id="updated">&nbsp;</div></div>
+      <div class="hbtns">
+      <button class="iconbtn" id="gear" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
       <button class="iconbtn" id="refresh" aria-label="Refresh">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>
       </button>
+      </div>
     </div>
   </header>
   <main id="view"></main>
@@ -118,8 +150,12 @@ nav button.on{color:var(--acc)}
   <button data-tab="hold" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M8 6V4h8v2"/></svg>Holdings</button>
   <button data-tab="us"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>US picks</button>
   <button data-tab="in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>India picks</button>
+  <button data-tab="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Check</button>
   <button data-tab="mkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Markets</button>
 </nav>
+
+<div id="sheet" class="hidden"><div class="panel" id="panel"></div></div>
+<div id="toast" class="hidden"></div>
 
 <script>
 (function(){
@@ -172,7 +208,8 @@ function decClass(d){ return d==='SELL'||d==='TAKE PROFIT'||d==='TRIM' ? 'sell' 
 
 function holdings(){
   const H = (DATA.holdings || []).slice().sort((a,b)=>(DEC_ORDER[a.decision]??9)-(DEC_ORDER[b.decision]??9));
-  if (!H.length) return `<div class="card empty">No holdings yet.<br><br>In Telegram send:<br><b>/buy AAPL 182.50 10 2024-11-05</b></div>`;
+  const bar = `<div class="addbar"><button class="btn" data-act="add">＋ Add stock</button><button class="btn" data-act="checkall">Check all</button></div>` + pendingCards('hold');
+  if (!H.length) return bar + `<div class="card empty">No holdings yet.<br>Tap <b>＋ Add stock</b> to enter what you own.</div>`;
   const tot = {};
   H.forEach(h => { if (!ok(h.close)) return; const t = tot[h.market] ||= {cost:0, val:0};
     t.cost += h.buy*h.qty; t.val += h.close*h.qty; });
@@ -183,7 +220,7 @@ function holdings(){
   }).join('') + '</div>';
   const action = H.filter(h => ['SELL','TAKE PROFIT','TRIM'].includes(h.decision)).length;
   const head = action ? `<h2 class="warn">${action} need${action>1?'':'s'} action</h2>` : `<h2>All positions</h2>`;
-  return sum + head + H.map(h => {
+  return bar + sum + head + H.map(h => {
     const c = cur(h.market);
     return `<div class="card tap">
       <div class="row"><div><span class="tk">${esc(h.ticker)}</span>${h.decision?`<span class="pill ${decClass(h.decision)}">${esc(h.decision)}</span>`:'<span class="pill">NOT CHECKED YET</span>'}
@@ -194,7 +231,11 @@ function holdings(){
       <div class="why">${esc((h.reasons||[]).join('; '))}</div>
       <div class="chev">Tap for hold plan ▾</div>
       <div class="more"><div class="plan">${esc(h.plan||'')}</div><div class="why">Checked ${ago(h.checked)}</div></div>`
-      : `<div class="why">It gets checked at the next hourly run while its market is open, or send /check in Telegram.</div>`}
+      : `<div class="why">Not analysed yet. Tap the card, then <b>Full check</b>.</div><div class="chev">Tap for options ▾</div>`}
+      <div class="more"><div class="acts">
+        <button class="btn sm" data-act="check" data-t="${esc(h.ticker)}">Full check</button>
+        <button class="btn sm danger" data-act="remove" data-t="${esc(h.ticker)}" data-p="${h.buy}">Remove</button>
+      </div></div>
     </div>`;
   }).join('');
 }
@@ -258,7 +299,113 @@ function markets(){
   return h;
 }
 
-const TITLES = {hold:'Holdings', us:'US picks', in:'India picks', mkt:'Markets'};
+
+function richText(t){
+  return esc(t).replace(/&lt;(\/?)(b|i)&gt;/g, '<$1$2>').replace(/\n/g, '<br>');
+}
+function checkTab(){
+  const C = DATA.checks || [];
+  let h = `<form class="search" id="chkform"><input id="chkq" placeholder="Stock name or ticker, e.g. Tata Motors" autocomplete="off" autocapitalize="off"><button class="btn pri" type="submit">Analyze</button></form>
+    <div class="hint">Full technical, fundamental, news and risk review with a TRADE / WAIT / DON'T TRADE verdict. Takes about 2 minutes. The result appears here and in Telegram.</div>`;
+  h += pendingCards('chk');
+  if (!C.length) h += `<div class="card empty" style="margin-top:12px">No analyses yet. Try <b>NVDA</b>, <b>Reliance</b> or <b>INFY.NS</b>.</div>`;
+  else h += `<h2>Recent analyses</h2>` + C.map((c,i) => `<div class="card tap ${i===0?'open':''}">
+      <div class="row"><div><span class="tk">${esc(c.ticker)}</span>${c.query && c.query.toUpperCase()!==c.ticker ? `<div class="nm">you searched “${esc(c.query)}”</div>`:''}</div>
+      <div class="sub">${ago(c.time)}</div></div>
+      <div class="chev">Tap to read ▾</div>
+      <div class="more"><div class="analysis" style="margin-top:10px">${richText(c.text)}</div>
+      <div class="acts"><button class="btn sm" data-act="recheck" data-t="${esc(c.ticker)}">Re-check now</button></div></div></div>`).join('');
+  return h;
+}
+
+// ---------- sending commands to GitHub (key lives only on this phone)
+function owner(){ const h = location.hostname; return h.endsWith('.github.io') ? h.split('.')[0] : (store.get('owner')||''); }
+function repoName(){ return store.get('repo') || 'Stockwatch'; }
+function pend(){ try { return JSON.parse(store.get('pending')||'[]'); } catch(e){ return []; } }
+function setPend(a){ store.set('pending', JSON.stringify(a.filter(x => Date.now()-x.at < 15*60000))); }
+function pendingCards(where){
+  return pend().filter(x=>x.where===where).map(x=>`<div class="card pending"><div class="row"><div><b>${esc(x.label)}</b><div class="why">Working on it… usually about 2 minutes (a bit longer if a scan is running).</div></div></div></div>`).join('');
+}
+function toast(msg, ms=4500){ const t=$('#toast'); t.innerHTML=msg; t.classList.remove('hidden'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.add('hidden'), ms); }
+
+async function send(cmd, label, where){
+  const key = store.get('ghkey');
+  if (!key) {
+    try { await navigator.clipboard.writeText(cmd); } catch(e){}
+    openSheet(noKeySheet(cmd));
+    return false;
+  }
+  const url = `https://api.github.com/repos/${owner()}/${repoName()}/actions/workflows/stockwatch.yml/dispatches`;
+  let r;
+  try {
+    r = await fetch(url, {method:'POST', headers:{'Authorization':'Bearer '+key,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},
+      body: JSON.stringify({ref:'main', inputs:{task:'monitor', command:cmd}})});
+  } catch(e){ toast('No connection. Try again.'); return false; }
+  if (r.status === 204) {
+    const a = pend(); a.push({label, where, at:Date.now()}); setPend(a);
+    toast('✓ Sent. ' + esc(label) + ' — updates here in about 2 minutes, and Telegram gets a message too.');
+    [90,150,240,360].forEach(sec => setTimeout(autoRefresh, sec*1000));
+    render(); return true;
+  }
+  const why = r.status===401 ? 'The app key is wrong or expired. Open ⚙︎ Settings and paste a new one.'
+    : r.status===404 ? 'Key can’t reach your Stockwatch repo. Check the key covers it with Actions: Read and write.'
+    : r.status===422 ? 'Your workflow file needs the latest update (the “command” input).'
+    : 'GitHub said ' + r.status + '.';
+  toast('Couldn’t send. ' + why, 8000);
+  return false;
+}
+async function autoRefresh(){
+  if (!PW) return;
+  const before = DATA && DATA.generated;
+  try { await load(PW); } catch(e){ return; }
+  if (DATA.generated !== before) { setPend(pend().filter(x => Date.now()-x.at < 60000)); render(); }
+}
+
+function openSheet(html){ $('#panel').innerHTML = html; $('#sheet').classList.remove('hidden'); }
+function closeSheet(){ $('#sheet').classList.add('hidden'); }
+$('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet' || e.target.closest('[data-close]')) closeSheet(); });
+
+function noKeySheet(cmd){
+  return `<h3>Almost there</h3>
+    <div class="hint">To send straight from the app, add your app key once in ⚙︎ Settings.</div>
+    <div class="hint">For now, this was copied, so you can paste it into your StockWatch Telegram chat:</div>
+    <div class="plan" style="font-family:ui-monospace,Menlo,monospace;font-size:13px">${esc(cmd)}</div>
+    <div class="acts"><a class="btn pri" href="tg://" style="flex:1;text-align:center">Open Telegram</a><button class="btn" data-open="settings" style="flex:1">Settings</button></div>
+    <div class="acts"><button class="btn" data-close style="flex:1">Close</button></div>`;
+}
+
+let MKT = 'us';
+function addSheet(){
+  const today = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  return `<h3>Add a stock you own</h3>
+    <div class="seg" id="mseg"><button type="button" data-m="us" class="${MKT==='us'?'on':''}">🇺🇸 US</button><button type="button" data-m="in" class="${MKT==='in'?'on':''}">🇮🇳 India</button></div>
+    <form id="addform">
+      <label class="field"><span>Ticker (e.g. ${MKT==='in'?'TATAMOTORS or INFY':'AAPL or NVDA'})</span><input id="f_t" required autocapitalize="characters" autocomplete="off"></label>
+      <div class="two">
+        <label class="field"><span>Price paid per share</span><input id="f_p" inputmode="decimal" required></label>
+        <label class="field"><span>Quantity</span><input id="f_q" inputmode="decimal" required></label>
+      </div>
+      <label class="field"><span>Date bought</span><input id="f_d" type="date" value="${today}" max="${today}"></label>
+      <div class="two">
+        <label class="field"><span>Your stop-loss (optional)</span><input id="f_s" inputmode="decimal"></label>
+        <label class="field"><span>Your target (optional)</span><input id="f_g" inputmode="decimal"></label>
+      </div>
+      <div class="hint">Bought the same stock more than once? Add each purchase, or use your average price and total shares.</div>
+      <div class="acts"><button type="button" class="btn" data-close style="flex:1">Cancel</button><button class="btn pri" type="submit" style="flex:2">Save</button></div>
+    </form>`;
+}
+function settingsSheet(){
+  const has = !!store.get('ghkey');
+  return `<h3>Settings</h3>
+    <label class="field"><span>App key (GitHub token with Actions: Read and write on your Stockwatch repo)</span>
+      <input id="s_key" type="password" placeholder="${has?'•••••••• saved':'github_pat_…'}" autocomplete="off"></label>
+    <div class="hint">Stored only on this iPhone. It lets the app add or remove stocks and run checks for you.</div>
+    <label class="field"><span>Repository name</span><input id="s_repo" value="${esc(repoName())}" autocapitalize="off"></label>
+    <div class="acts"><button class="btn pri" id="s_save" style="flex:2">Save</button>${has?'<button class="btn danger" id="s_del" style="flex:1">Remove key</button>':''}</div>
+    <div class="acts"><button class="btn" id="s_lock" style="flex:1">Lock app</button><button class="btn" data-close style="flex:1">Close</button></div>`;
+}
+
+const TITLES = {hold:'Holdings', us:'US picks', in:'India picks', chk:'Check a stock', mkt:'Markets'};
 function render(){
   if (!DATA) return;
   document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === TAB));
@@ -266,10 +413,10 @@ function render(){
   let stamp = DATA.generated;
   if (TAB==='us' || TAB==='in') stamp = ((DATA.markets||{})[TAB]||{}).updated || stamp;
   $('#updated').textContent = 'Updated ' + ago(stamp);
-  $('#view').innerHTML = (TAB==='hold' ? holdings() : TAB==='mkt' ? markets() : market(TAB)) +
+  $('#view').innerHTML = (TAB==='hold' ? holdings() : TAB==='mkt' ? markets() : TAB==='chk' ? checkTab() : market(TAB)) +
     `<div class="note">Research aid, not financial advice. Prices are about 15 minutes delayed. Buy/sell alerts arrive in Telegram.</div>`;
   document.querySelectorAll('.tap').forEach(el => el.addEventListener('click', e => {
-    if (e.target.closest('a')) return; el.classList.toggle('open'); }));
+    if (e.target.closest('a,button,input,form')) return; el.classList.toggle('open'); }));
 }
 
 document.querySelectorAll('nav button').forEach(b => b.addEventListener('click', () => {
@@ -279,6 +426,51 @@ $('#refresh').addEventListener('click', async () => { if (PW) { try { await load
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible' && PW) { try { await load(PW); render(); } catch(e){} }
 });
+
+
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act],[data-open],[data-m]');
+  if (!b) return;
+  if (b.dataset.m) { MKT = b.dataset.m; store.set('mkt', MKT); const keep = ['#f_t','#f_p','#f_q','#f_d','#f_s','#f_g'].map(id => $(id) ? $(id).value : ''); openSheet(addSheet()); ['#f_t','#f_p','#f_q','#f_d','#f_s','#f_g'].forEach((id,i) => { if (keep[i]) $(id).value = keep[i]; }); return; }
+  if (b.dataset.open === 'settings') { openSheet(settingsSheet()); return; }
+  const act = b.dataset.act, t = b.dataset.t;
+  if (act === 'add') { MKT = store.get('mkt') || 'us'; openSheet(addSheet()); }
+  else if (act === 'checkall') send('/check', 'Checking all holdings', 'hold');
+  else if (act === 'check' || act === 'recheck') { send('/check ' + t, 'Analysing ' + t, act==='check'?'hold':'chk'); }
+  else if (act === 'remove') {
+    if (b.dataset.armed) { send(`/sell ${t} ${b.dataset.p}`, 'Removing ' + t, 'hold'); }
+    else { b.dataset.armed = '1'; b.textContent = 'Tap again to remove'; setTimeout(()=>{ delete b.dataset.armed; b.textContent='Remove'; }, 4000); }
+  }
+});
+document.addEventListener('submit', async e => {
+  if (e.target.id === 'addform') {
+    e.preventDefault();
+    const num = id => $(id).value.trim().replace(/[,$₹\s]/g,'');
+    let t = $('#f_t').value.trim().toUpperCase().replace(/\s+/g,'');
+    if (MKT === 'in' && !/\.(NS|BO)$/.test(t)) t += '.NS';
+    const p = num('#f_p'), q = num('#f_q'), d = $('#f_d').value, st = num('#f_s'), tg = num('#f_g');
+    if (!(+p > 0) || !(+q > 0)) { toast('Enter the price and quantity as numbers.'); return; }
+    let cmd = `/buy ${t} ${p} ${q}` + (d ? ' ' + d : '') + (+st>0 ? ' stop=' + st : '') + (+tg>0 ? ' target=' + tg : '');
+    closeSheet();
+    await send(cmd, 'Adding ' + t, 'hold');
+  }
+  if (e.target.id === 'chkform') {
+    e.preventDefault();
+    const q = $('#chkq').value.trim();
+    if (!q) return;
+    await send('/check ' + q, 'Analysing ' + q, 'chk');
+  }
+});
+document.addEventListener('click', e => {
+  if (e.target.id === 's_save') {
+    const k = $('#s_key').value.trim(), r = $('#s_repo').value.trim();
+    if (k) store.set('ghkey', k);
+    if (r) store.set('repo', r);
+    closeSheet(); toast(k ? 'App key saved on this iPhone.' : 'Saved.');
+  } else if (e.target.id === 's_del') { store.del('ghkey'); closeSheet(); toast('App key removed.'); }
+  else if (e.target.id === 's_lock') { store.del('pw'); location.reload(); }
+});
+$('#gear').addEventListener('click', () => openSheet(settingsSheet()));
 
 function alertLock(e){
   $('#lock').classList.remove('hidden');
